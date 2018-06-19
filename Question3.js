@@ -1,22 +1,16 @@
 const changePossibilities = (amount, denominations) => {
-	let arr = []
+	let len = 0
 
 	if(denominations.length === 0) {
-		return arr
+		return len
 	}
 
 	if(denominations.length === 1) {
 		let value = denominations[0]
 		if(!(amount%value)) {
-			let straight = []
-			let sum = 0
-			while(amount > sum) {
-				straight.push(value)
-				sum += value
-			}
-			arr.push(straight)
+			len++
 		}
-		return arr
+		return len
 	}
 
 	let max = denominations[denominations.length-1]
@@ -24,35 +18,29 @@ const changePossibilities = (amount, denominations) => {
 
 	if(max === amount) {
 
-		arr.push([max])
+		len++
 
 	} else if(diff <= max && diff >= denominations[0]) {
 
 		let memo = changePossibilities(diff, denominations.slice(0,-1))
 
 		if(diff === max) {
-			arr.push([max, max])
+			len++
 		}
 
-		if(memo[0]) {
-			arr.push(...memo.map(v => {
-				v.unshift(max)
-				return v
-			}))
-		}
+		len += memo
+
 	} else if(diff > max) {
 		let memo = changePossibilities(diff, denominations)
-		if(memo[0]) {
-			arr.push(...memo.map(v => {
-				v.unshift(max)
-				return v
-			}))
-		}
+		len += memo
 	}
 
-	arr.push(...changePossibilities(amount, denominations.slice(0,-1)))
+	len += changePossibilities(amount, denominations.slice(0,-1))
 
-	console.log(arr)
-
-	return arr.length
+	return len
 }
+
+let result = changePossibilities(4, [1,2,3])
+
+
+result
