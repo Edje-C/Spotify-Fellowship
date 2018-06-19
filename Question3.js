@@ -52,5 +52,7 @@ const changePossibilities = (amount, denominations) => {
 
 	arr.push(...changePossibilities(amount, denominations.slice(0,-1)))
 
-	return arr
+	console.log(arr)
+
+	return arr.length
 }
